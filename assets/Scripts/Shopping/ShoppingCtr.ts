@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, director, Layout, Node } from 'cc';
+import { _decorator, Button, Component, director , Layout, Node, Sprite, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Shopping')
@@ -29,15 +29,59 @@ export class Shopping extends Component {
     }
 
     onLoad () {
-        this.initShopping();
+        const playerChoose = this.loadDataLocalStorage("player_choose")
+        if(playerChoose){
+            this.initShopping(playerChoose);
+        }
     }
 
-    initShopping () {
+    onSave(key : string, val : any){
+        const jsonData = JSON.stringify(val);
+        localStorage.setItem(key, jsonData);
+    }
+
+    loadDataLocalStorage (key : string | null) {
+        const jsonData = localStorage.getItem(key);
+        if (jsonData) {
+            return JSON.parse(jsonData);
+        }
+        return null;
+    }
+
+    initShopping (playerChoose : number) {
         const layout = this.layoutBirds.getComponent(Layout);
-        console.log(layout)
         this.birds.forEach(element => {
-            console.log(element)
+            const index = element.getSiblingIndex() + 1;
+            console.log(playerChoose, index)
+            if(playerChoose == index){
+                const elm = element.getComponent(UITransform);
+                elm.setContentSize(this.scaleX, this.scaleY);
+            }
         });
+    }
+
+    setSizebird (uiTransform : UITransform) {
+        this.birds.forEach(element => {
+            const elm = element.getComponent(UITransform);
+            elm.setContentSize(this.baseWidth, this.baseHeight);
+        })
+        if(uiTransform){
+            uiTransform.setContentSize(this.scaleX , this.scaleY);
+        }
+    }
+
+
+    chooseBird (event : Event) {
+        const targetNode = event.target as unknown as Node;
+        const uiTransform = targetNode.getComponent(UITransform);
+        const sprite = targetNode.getComponent(Sprite);
+        if(sprite){
+            const index = sprite.node.getSiblingIndex();
+            this.onSave("player_choose" , index + 1);
+        }
+        if(uiTransform){
+            this.setSizebird(uiTransform)
+        }
     }
 }
 
