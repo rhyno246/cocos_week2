@@ -49,7 +49,6 @@ export class Shopping extends Component {
     }
 
     initShopping (playerChoose : number) {
-        const layout = this.layoutBirds.getComponent(Layout);
         this.birds.forEach(element => {
             const index = element.getSiblingIndex() + 1;
             console.log(playerChoose, index)
