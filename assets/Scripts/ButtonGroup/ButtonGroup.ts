@@ -31,7 +31,7 @@ export class ButtonGroup extends Component {
     @property({
         type : Label
     })
-    public level : Label
+    public lavel : Label
 
     @property({
         type : Label
@@ -39,15 +39,23 @@ export class ButtonGroup extends Component {
     public result : Label
 
 
+    public currentLevel : number = 1;
+    public currentScore : number;
+
+
     showSceneHome(){
         director.loadScene("scene");
     }
 
     onReset(){
+        this.updateScore(0);
         this.hideResult();
     }
 
-
+    updateLevel (val : number) {
+        this.currentLevel = val;
+        this.lavel.string = 'Level : ' + val;
+    }
 
     hideResult () {
         this.result.node.active = false;
@@ -67,6 +75,14 @@ export class ButtonGroup extends Component {
         director.resume();
         this.btnResume.node.active = false;
         this.btnHome.node.active = false;
+    }
+
+    updateScore(num : number){
+        this.currentScore = num;
+    }
+
+    addScore () {
+        console.log('add score' , this.currentScore++);
     }
 
 

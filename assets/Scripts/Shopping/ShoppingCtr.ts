@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, director , Layout, Node, Sprite, UITransform } from 'cc';
+import { _decorator, Button, Component, director , Layout, Node, ScrollView, Sprite, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Shopping')
@@ -30,10 +30,17 @@ export class Shopping extends Component {
 
     onLoad () {
         const playerChoose = this.loadDataLocalStorage("player_choose")
+        // const scroll = this.layoutBirds.getComponent(ScrollView);
+        // if(scroll){
+        //     scroll.scrollToTop(5);
+        //     scroll.node.on(Node.EventType.TOUCH_MOVE, this.onScrollMove, this);
+        // }
         if(playerChoose){
             this.initShopping(playerChoose);
         }
     }
+
+
 
     onSave(key : string, val : any){
         const jsonData = JSON.stringify(val);
