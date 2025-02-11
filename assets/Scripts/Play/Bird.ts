@@ -1,4 +1,4 @@
-import { _decorator, Animation, CCFloat, Component, easing, Tween, tween, Vec3 } from 'cc';
+import { _decorator, Animation, CCFloat, Component, tween, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bird')
@@ -16,7 +16,6 @@ export class Bird extends Component {
     public bridAnimation : Animation;
     public birdLocation : Vec3;
     public birdHit : boolean;
-    public test : Tween;
 
     
 
@@ -33,10 +32,7 @@ export class Bird extends Component {
 
     fly () {
         this.bridAnimation.stop();
-        if(this.test){
-            this.test.stop();
-        }
-        // this.test = tween(new Vec3(0)).to(this.jumpDuration, new Vec3(this.node.position.x, this.node.position.y + this.jumpHeight, 0),
+        // tween(this.node.position).to(this.jumpDuration, new Vec3(this.node.position.x, this.node.position.y + this.jumpHeight, 0),
         //     { 
         //         easing : 'smooth',
         //         onUpdate : (target : Vec3 , ratio : number) => {
@@ -45,12 +41,9 @@ export class Bird extends Component {
         //         }
         //     }
         // ).start();
-
-        this.test = tween(this.node).to(this.jumpDuration, {
+        tween(this.node).to(this.jumpDuration, {
             position: new Vec3(this.node.position.x, this.node.position.y + this.jumpHeight, 0)
         }, {easing: 'smooth'}).start();
-
-
         this.bridAnimation.play();
     }
 
