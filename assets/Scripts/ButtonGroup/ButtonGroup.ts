@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, director, Label, Node } from 'cc';
+import { _decorator, Button, Component, director, Label, Node, ProgressBar } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('ButtonGroup')
@@ -38,18 +38,21 @@ export class ButtonGroup extends Component {
     })
     public result : Label
 
+    @property({
+        type : ProgressBar
+    })
+    public progressBar : Button
+
 
     public currentLevel : number = 1;
     public currentScore : number;
+    public maxPipe : number = 10;
+    public maxLevel : number = 9;
 
 
     showSceneHome(){
+        director.resume();
         director.loadScene("scene");
-    }
-
-    onReset(){
-        this.updateScore(0);
-        this.hideResult();
     }
 
     updateLevel (val : number) {
@@ -69,6 +72,8 @@ export class ButtonGroup extends Component {
         director.pause();
         this.btnResume.node.active = true;
         this.btnHome.node.active = true;
+
+        
     }
 
     resumeGame () {
@@ -79,19 +84,26 @@ export class ButtonGroup extends Component {
 
     updateScore(num : number){
         this.currentScore = num;
+        this.progressBar.getComponent(ProgressBar).progress = num / this.maxPipe;
+        localStorage.setItem("score_bird", JSON.stringify({score: num }));
     }
 
+    
     addScore () {
-        console.log('add score' , this.currentScore++);
+        this.updateScore(++this.currentScore);
     }
-
+    resetScore (){
+        this.updateScore(0)
+        this.hideResult();
+    }
+    
 
     resultWin () {
-
+        alert('win')
     }
 
     resultLoss () {
-
+        alert('lose')
     }
 
 }

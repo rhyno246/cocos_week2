@@ -25,8 +25,11 @@ export class PipePool extends Component {
             }
         }
     }
-    reset(){
-
+    reset(prefabLevelPipes: Prefab){
+        this.prefabPipes = prefabLevelPipes;
+        this.pipePoolHome.removeAllChildren();
+        this.pool.clear();
+        this.initPool();
     }
 
 }

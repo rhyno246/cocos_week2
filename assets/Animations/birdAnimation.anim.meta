@@ -1,0 +1,13 @@
+{
+  "ver": "2.0.3",
+  "importer": "animation-clip",
+  "imported": true,
+  "uuid": "12047328-a0ea-4733-bd78-2bb450140f11",
+  "files": [
+    ".cconb"
+  ],
+  "subMetas": {},
+  "userData": {
+    "name": "birdAnimation"
+  }
+}

@@ -29,12 +29,8 @@ export class Shopping extends Component {
     }
 
     onLoad () {
+        director.resume();
         const playerChoose = this.loadDataLocalStorage("player_choose")
-        // const scroll = this.layoutBirds.getComponent(ScrollView);
-        // if(scroll){
-        //     scroll.scrollToTop(5);
-        //     scroll.node.on(Node.EventType.TOUCH_MOVE, this.onScrollMove, this);
-        // }
         if(playerChoose){
             this.initShopping(playerChoose);
         }
@@ -55,11 +51,10 @@ export class Shopping extends Component {
         return null;
     }
 
-    initShopping (playerChoose : number) {
+    initShopping (playerChoose : any) {
         this.birds.forEach(element => {
             const index = element.getSiblingIndex() + 1;
-            console.log(playerChoose, index)
-            if(playerChoose == index){
+            if(playerChoose.index == index){
                 const elm = element.getComponent(UITransform);
                 elm.setContentSize(this.scaleX, this.scaleY);
             }
@@ -83,7 +78,10 @@ export class Shopping extends Component {
         const sprite = targetNode.getComponent(Sprite);
         if(sprite){
             const index = sprite.node.getSiblingIndex();
-            this.onSave("player_choose" , index + 1);
+            this.onSave("player_choose" , {
+                index : index + 1,
+                color : sprite.color
+            });
         }
         if(uiTransform){
             this.setSizebird(uiTransform)
