@@ -68,6 +68,21 @@ export class ButtonGroup extends Component {
         this.btnHome.node.active = false;
     }
 
+    showResultLose () {
+        this.result.node.active = true;
+        this.btnReplay.node.active = true;
+        this.btnHome.node.active = true;
+        this.result.string = "YOU LOSE"
+    }
+
+    showResultWin () {
+        this.result.node.active = true;
+        this.btnNextLv.node.active = true;
+        this.btnHome.node.active = true;
+        this.result.string = "YOU WIN"
+    }
+
+
     pauseGame() {
         director.pause();
         this.btnResume.node.active = true;
@@ -97,15 +112,6 @@ export class ButtonGroup extends Component {
         this.hideResult();
     }
     
-
-    resultWin () {
-        alert('win')
-    }
-
-    resultLoss () {
-        alert('lose')
-    }
-
 }
 
 

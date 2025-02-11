@@ -1,7 +1,8 @@
-import { _decorator, CCInteger, Color, Component, director, Node, Prefab, Sprite, UITransform, Vec3 } from 'cc';
+import { _decorator, CCInteger, Collider2D, Color, Component, Contact2DType, director, IPhysics2DContact, Node, Prefab, Sprite, UITransform, Vec3 } from 'cc';
 import { ButtonGroup } from '../ButtonGroup/ButtonGroup';
 import { PipePool } from './PipePool';
 import { Bird } from './Bird';
+import { Audio } from './Audio';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayCtr')
@@ -37,6 +38,11 @@ export class PlayCtr extends Component {
     })
     public bird : Bird
 
+    @property({
+        type : Audio
+    })
+    public audio : Audio
+
 
     public isOver: boolean;
     public isPlay: boolean;
@@ -49,6 +55,7 @@ export class PlayCtr extends Component {
         this.isOver = true;
         director.pause();
         this.isPlay = true;
+        this.contactGroundPipe();
     }
 
     initListener () {
@@ -56,9 +63,11 @@ export class PlayCtr extends Component {
             if(!this.isOver && this.isPlay){
                 this.bird?.fly();
                 director.resume();
+                this.audio.soundGame(0)
             }else if(this.isOver && this.isPlay){
                 this.bird?.fly();
                 this.replayGame();
+                this.audio.soundGame(0)
                 director.resume();
             }
         })
@@ -106,6 +115,33 @@ export class PlayCtr extends Component {
 
     passPipe(){
         this.btnGroup.addScore();
+        if(this.btnGroup.currentScore == this.btnGroup.maxPipe){
+            alert('win');
+        }
+    }
+
+    contactGroundPipe () {
+        let collider = this.bird.getComponent(Collider2D);
+        if(collider){
+            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact , this)
+        }
+    }
+
+    onBeginContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        this.bird.birdHit = true;
+    }
+
+    gameOver () {
+        this.btnGroup.showResultLose();
+        this.isOver = true;
+        this.isPlay = false;
+        director.pause();
+    }
+
+    update() {
+        if(this.bird.birdHit == true){
+            this.gameOver();
+        }
     }
 
 
