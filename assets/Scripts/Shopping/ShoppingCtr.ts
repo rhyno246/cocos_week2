@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, director , Layout, Node, ScrollView, Sprite, UITransform } from 'cc';
+import { _decorator, Button, Component, director , Node , ScrollView, Sprite, UITransform, v3, Vec2, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Shopping')
@@ -33,8 +33,18 @@ export class Shopping extends Component {
         const playerChoose = this.loadDataLocalStorage("player_choose")
         if(playerChoose){
             this.initShopping(playerChoose);
+            this.scrollToIndex(playerChoose.index);
+        }   
+    }
+
+    scrollToIndex(index : number) {
+        const scroll = this.layoutBirds.getComponent(ScrollView);
+        if(scroll){
+            scroll.scrollToPercentHorizontal(index, 0.5, true);
         }
     }
+
+
 
 
 

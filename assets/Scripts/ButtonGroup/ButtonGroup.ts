@@ -87,8 +87,6 @@ export class ButtonGroup extends Component {
         director.pause();
         this.btnResume.node.active = true;
         this.btnHome.node.active = true;
-
-        
     }
 
     resumeGame () {
@@ -101,6 +99,10 @@ export class ButtonGroup extends Component {
         this.currentScore = num;
         this.progressBar.getComponent(ProgressBar).progress = num / this.maxPipe;
         localStorage.setItem("score_bird", JSON.stringify({score: num }));
+    }
+
+    upLevel () {
+        this.updateLevel(++this.currentLevel)
     }
 
     

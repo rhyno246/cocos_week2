@@ -8,10 +8,10 @@ const { ccclass, property } = _decorator;
 @ccclass('PlayCtr')
 export class PlayCtr extends Component {
     @property({ 
-        type: [Prefab], 
+        type: Prefab, 
         tooltip: 'The prefab of pipes'
     })
-    public prefabPipes: Prefab[] = [];
+    public prefabPipes = null;
 
     @property({
         type : ButtonGroup
@@ -61,11 +61,12 @@ export class PlayCtr extends Component {
     initListener () {
         this.node.on(Node.EventType.TOUCH_START, () => {
             if(!this.isOver && this.isPlay){
-                this.bird?.fly();
-                director.resume();
+                this.btnGroup.hideResult();
+                this.bird.fly();
                 this.audio.soundGame(0)
+                director.resume();
             }else if(this.isOver && this.isPlay){
-                this.bird?.fly();
+                this.bird.fly();
                 this.replayGame();
                 this.audio.soundGame(0)
                 director.resume();
@@ -92,31 +93,44 @@ export class PlayCtr extends Component {
     }
 
     replayGame () {
-        this.bird?.resetBird();
-        this.isPlay = true;
         this.resetGame();
+        this.bird.resetBird();
+        this.btnGroup.hideResult();
+        this.bird.node.active = true;
+        this.isPlay = true;
+        director.pause();
     }
 
     resetGame() {
-        this.pipePool.reset(this.prefabPipes[this.btnGroup.currentLevel - 1]);
+        this.pipePool.reset(this.prefabPipes);
         this.isOver = false;
         this.btnGroup.resetScore();
         this.startGame();
     }
 
     startGame () {
+        this.bird.resetBird();
         this.btnGroup.hideResult();
-        console.log('start')
+        director.resume();
     }
 
-    pauseGame () {
-
+    nextLevel () {
+        this.bird.resetBird();
+        this.btnGroup.upLevel();
+        this.isPlay = true;
+        this.replayGame();
     }
+
+
 
     passPipe(){
         this.btnGroup.addScore();
+        this.audio.soundGame(1);
         if(this.btnGroup.currentScore == this.btnGroup.maxPipe){
-            alert('win');
+            this.isOver = true;
+            this.isPlay = false;
+            this.btnGroup.showResultWin();
+            this.bird.node.active = false;
         }
     }
 
@@ -129,9 +143,11 @@ export class PlayCtr extends Component {
 
     onBeginContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         this.bird.birdHit = true;
+        this.audio.soundGame(2)
     }
 
     gameOver () {
+        this.audio.soundGame(3)
         this.btnGroup.showResultLose();
         this.isOver = true;
         this.isPlay = false;
