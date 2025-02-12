@@ -11,7 +11,7 @@ export class PlayCtr extends Component {
         type: Prefab, 
         tooltip: 'The prefab of pipes'
     })
-    public prefabPipes = null;
+    public prefabPipes : Prefab[] = [];
 
     @property({
         type : ButtonGroup
@@ -102,7 +102,7 @@ export class PlayCtr extends Component {
     }
 
     resetGame() {
-        this.pipePool.reset(this.prefabPipes);
+        this.pipePool.reset(this.prefabPipes[this.btnGroup.currentLevel - 1]);
         this.isOver = false;
         this.btnGroup.resetScore();
         this.startGame();
@@ -119,6 +119,9 @@ export class PlayCtr extends Component {
         this.btnGroup.upLevel();
         this.isPlay = true;
         this.replayGame();
+        if(this.btnGroup.currentLevel == this.btnGroup.maxLevel){
+            this.btnGroup.updateLevel(1);
+        }
     }
 
 

@@ -1,23 +1,22 @@
-import { _decorator, Component, director, Node , Vec3 , screen, UITransform } from 'cc';
+import { _decorator, Component, director, Node, screen, UITransform, Vec3 } from 'cc';
 import { PlayCtr } from './PlayCtr';
 const { ccclass, property } = _decorator;
-
 const random =  (min : number, max : number) => {
     return Math.random() * (max - min) + min;
 }
-@ccclass('Pipe')
-export class Pipe extends Component {
+@ccclass('PipeMove')
+export class PipeMove extends Component {
     @property({
         type: Node,
         tooltip: 'Top Pipe'
-     })
-     public topPipe: Node;
+    })
+    public topPipe: Node;
     
-     @property({
-        type: Node,
+    @property({
+    type: Node,
         tooltip: 'Bottom Pipe'
-     })
-     public bottomPipe: Node;
+    })
+    public bottomPipe: Node;
 
 
      
@@ -35,8 +34,7 @@ export class Pipe extends Component {
     public verticalOffset: number = 0;
     public verticalDuration: number = 1;
 
-
-
+    public PIPE_MOVING_Y = 90;
 
     isPass: boolean;
 
@@ -64,15 +62,15 @@ export class Pipe extends Component {
 
 
     update(deltaTime: number){
-        // this.verticalOffset += this.verticalDuration * random(1, 3);
-        // if (this.verticalOffset > this.PIPE_MOVING_Y || this.verticalOffset < - this.PIPE_MOVING_Y) {
-        //     this.verticalDuration *= -1; 
-        // }
+        this.verticalOffset += this.verticalDuration * random(1, 3);
+        if (this.verticalOffset > this.PIPE_MOVING_Y || this.verticalOffset < - this.PIPE_MOVING_Y) {
+            this.verticalDuration *= -1; 
+        }
         this.tempSpeed = this.pipeSpeed * deltaTime;
         const poTopPipe = this.topPipe.getPosition();
         const poBottomPipe = this.bottomPipe.getPosition();
-        const newPoTopPipe = new Vec3(poTopPipe.x - this.tempSpeed , poTopPipe.y);
-        const newPoBottomPipe = new Vec3(poBottomPipe.x - this.tempSpeed , poBottomPipe.y);
+        const newPoTopPipe = new Vec3(poTopPipe.x - this.tempSpeed , poTopPipe.y + this.verticalOffset * deltaTime);
+        const newPoBottomPipe = new Vec3(poBottomPipe.x - this.tempSpeed , poBottomPipe.y + this.verticalOffset * deltaTime);
 
         
         

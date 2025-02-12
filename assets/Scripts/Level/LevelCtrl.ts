@@ -24,8 +24,8 @@ export class LevelCtrl extends Component {
     public layout : Node
 
     public pageIndex: number = 1;
-    public pageNumber: number = 20;
-    public maxLevel: number = 100;
+    public pageNumber: number = 3;
+    public maxLevel: number = 9;
     public sizeButton: number = 60;
 
 
